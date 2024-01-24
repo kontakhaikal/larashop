@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  larashopdb:
+    container_name: larashopdb
+    image: docker.io/library/postgres:16.1-alpine3.19
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=larashop
+      - POSTGRES_PASSWORD=larashop
+      - POSTGRES_DB=larashop

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 
-const props = defineProps<{ label: string }>();
+const props = defineProps<{ id: string; label: string }>();
 
 const model = defineModel<string, string>({ required: true });
 
@@ -18,10 +18,11 @@ const show = computed(() => model.value.trim().length > 0 || focus.value);
         <label
             :class="{ '-translate-y-6 text-sm': show }"
             class="absolute bg-white px-1 transition-all text-slate-700 pointer-events-none"
-            for=""
-            >{{ label }}</label
+            :for="props.id"
+            >{{ props.label }}</label
         >
         <input
+            :id="props.id"
             @focus="focus = true"
             @blur="focus = false"
             class="w-full h-full focus:outline-none"

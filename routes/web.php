@@ -1,7 +1,13 @@
 <?php
 
+use App\Dto\LoginUserRequest;
+use App\Dto\RegisterUserRequest;
+use App\Services\UserService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -179,11 +185,32 @@ Route::get('/products/{id}', function () {
     ]);
 });
 
+
 Route::get('/register', function () {
     return Inertia::render('Register');
 });
 
+Route::post('/register', function (RegisterUserRequest $data, UserService $userService) {
+    $userService->registerCustomer($data);
+    return redirect('/login');
+});
 
 Route::get('/login', function () {
     return Inertia::render('Login');
+});
+
+Route::post('/login', function (LoginUserRequest $data) {
+
+    $success = Auth::attempt([
+        'username' => $data->username,
+        'password' => $data->password
+    ], $data->remember);
+
+    if (!$success) {
+        return redirect('/login')->withErrors([
+            'general' => 'Wrong username or password'
+        ]);
+    }
+
+    return redirect('/');
 });
