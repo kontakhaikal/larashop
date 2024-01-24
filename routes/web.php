@@ -178,3 +178,12 @@ Route::get('/products/{id}', function () {
         ]
     ]);
 });
+
+Route::get('/register', function () {
+    return Inertia::render('Register');
+});
+
+
+Route::get('/login', function () {
+    return Inertia::render('Login');
+});
