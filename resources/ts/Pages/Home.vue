@@ -3,7 +3,6 @@ import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import ProductListSection from "../components/ProductListSection.vue";
 import EmailSection from "../components/EmailSection.vue";
-import CategorySection from "../components/CategorySection.vue";
 import BannerSection from "../components/BannerSection.vue";
 import RecomendationSection from "../components/RecomendationSection.vue";
 
@@ -14,9 +13,13 @@ export type Product = {
     image: string;
     score: number;
     reviews: number;
+    stock: number;
 };
 
-const props = defineProps<{ products: Product[] }>();
+const props = defineProps<{
+    products: Product[];
+    recommendedProducts: Product[];
+}>();
 </script>
 
 <template>
@@ -29,7 +32,7 @@ const props = defineProps<{ products: Product[] }>();
             >
                 <ProductListSection :products="props.products" />
             </section>
-            <RecomendationSection :products="props.products" />
+            <RecomendationSection :products="props.recommendedProducts" />
             <EmailSection />
         </main>
     </main>
