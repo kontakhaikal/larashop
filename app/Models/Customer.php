@@ -39,14 +39,16 @@ class Customer extends User
      */
     protected $casts = [
         'password' => 'hashed',
-        'role' => 'CUSTOMER'
     ];
 
     protected static function booted()
     {
         parent::booted();
+        static::creating(function ($customer) {
+            $customer->role = 'customer';
+        });
         static::addGlobalScope('role', function (Builder $builder) {
-            $builder->where('role', 'CUSTOMER');
+            $builder->where('role', 'customer');
         });
     }
 }

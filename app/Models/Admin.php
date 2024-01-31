@@ -35,14 +35,16 @@ class Admin extends User
      */
     protected $casts = [
         'password' => 'hashed',
-        'role' => 'ADMIN'
     ];
 
     protected static function booted()
     {
         parent::booted();
+        static::creating(function ($admin) {
+            $admin->role = 'admin';
+        });
         static::addGlobalScope('role', function (Builder $builder) {
-            $builder->where('role', 'ADMIN');
+            $builder->where('role', 'admin');
         });
     }
 }

@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 
-const props = defineProps<{ id: string; label: string }>();
+const props = defineProps<{ id: string; label: string; active?: boolean }>();
 
 const model = defineModel<string, string>({ required: true });
 
 const focus = ref(false);
 
-const show = computed(() => model.value.trim().length > 0 || focus.value);
+const show = computed(
+    () => props.active || model.value.trim().length > 0 || focus.value,
+);
 </script>
 
 <template>

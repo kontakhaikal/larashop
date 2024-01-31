@@ -1,7 +1,11 @@
 <?php
 
+use App\Dto\AddBrandRequest;
+use App\Dto\AddCategoryRequest;
 use App\Dto\LoginUserRequest;
 use App\Dto\RegisterUserRequest;
+use App\Services\BrandService;
+use App\Services\CategoryService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -195,9 +199,18 @@ Route::post('/register', function (RegisterUserRequest $data, UserService $userS
     return redirect('/login');
 });
 
+Route::get('/register-admin', function () {
+    return Inertia::render('RegisterAdmin');
+});
+
+Route::post('register-admin', function (RegisterUserRequest $data, UserService $userService) {
+    $userService->registerAdmin($data);
+    return redirect('/login');
+});
+
 Route::get('/login', function () {
     return Inertia::render('Login');
-});
+})->name('login');
 
 Route::post('/login', function (LoginUserRequest $data) {
 
@@ -213,4 +226,28 @@ Route::post('/login', function (LoginUserRequest $data) {
     }
 
     return redirect('/');
+});
+
+Route::middleware(['auth', 'role:admin'])->get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+});
+
+
+Route::get('/brands', function (BrandService $brandService) {
+    return $brandService->getBrands();
+});
+
+Route::middleware(['auth', 'role:admin'])->post('/brands', function (AddBrandRequest $data, BrandService $brandService) {
+    $response = $brandService->addBrand($data);
+    return Inertia::share('id', $response);
+});
+
+Route::get('/categories', function (CategoryService $categoryService) {
+    return $categoryService->getCategories();
+});
+
+
+Route::middleware(['auth', 'role:admin'])->post('/categories', function (AddCategoryRequest $data, CategoryService $categoryService) {
+    $response = $categoryService->addCategory($data);
+    return Inertia::share('id', $response);
 });
