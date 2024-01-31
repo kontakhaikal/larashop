@@ -11,11 +11,14 @@ const form = useForm({
     remember: false,
 });
 
-const error = ref<{ general?: string }>({});
+const error = ref<{ general?: string; password?: string; username?: string }>(
+    {},
+);
 
 const submit = () => {
     form.post("/login", {
         onError(errors) {
+            console.log({ errors });
             error.value = errors;
         },
     });
@@ -33,16 +36,40 @@ const submit = () => {
                 @submit.prevent="submit"
             >
                 <Error v-if="error.general" :message="error.general" />
-                <Input
-                    id="login-username"
-                    label="Username"
-                    v-model="form.username"
-                />
-                <Input
-                    id="login-password"
-                    label="Password"
-                    v-model="form.password"
-                />
+                <div>
+                    <Input
+                        id="login-username"
+                        label="Username"
+                        v-model="form.username"
+                    />
+                    <Error
+                        class="mt-1 mb-2"
+                        :message="error.password"
+                        v-if="error.password"
+                    />
+                </div>
+                <div>
+                    <Input
+                        id="login-password"
+                        label="Password"
+                        v-model="form.password"
+                    />
+                    <Error
+                        class="mt-1 mb-2"
+                        :message="error.password"
+                        v-if="error.password"
+                    />
+                </div>
+
+                <div class="flex gap-x-2 ml-1">
+                    <input
+                        class="accent-slate-950"
+                        type="checkbox"
+                        v-model="form.remember"
+                    />
+                    <p class="text-slate-700">Remember me</p>
+                </div>
+
                 <Button
                     :disabled="form.processing"
                     :loading="form.processing"
