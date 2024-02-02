@@ -9,7 +9,7 @@ import InputImage from "./InputImage.vue";
 type FormSchema = {
     name: string;
     description: string;
-    category_id: string;
+    category_ids: string[];
     brand_id: string;
     image: File;
     stock: number;
@@ -19,7 +19,7 @@ type FormSchema = {
 const form = useForm<FormSchema>({
     name: "",
     description: "",
-    category_id: "",
+    category_ids: [],
     brand_id: "",
     image: null,
     stock: 1,
@@ -27,8 +27,12 @@ const form = useForm<FormSchema>({
 });
 
 const submit = () => {
-    // form.post("/products");
     console.log({ data: form.data() });
+    form.post("/products", {
+        onError(error) {
+            console.log({ error });
+        },
+    });
 };
 
 const { data: brands } = useQuery({
@@ -78,7 +82,13 @@ const { data: categories } = useQuery({
                     <select
                         id="product-category"
                         name="category_id"
-                        v-model="form.category_id"
+                        :value="form.category_ids[0]"
+                        @change="
+                            (event) =>
+                                (form.category_ids = [
+                                    (event.target as HTMLSelectElement).value,
+                                ])
+                        "
                         class="bg-white border px-3 py-2 rounded-md"
                     >
                         <option

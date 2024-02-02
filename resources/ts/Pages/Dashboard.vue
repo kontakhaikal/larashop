@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import AddProductSection from "@/components/AddProductSection.vue";
-import BrandDashboardSection from "@/components/BrandDashboardSection.vue";
+import AddProductDashboard from "@/components/AddProductDashboard.vue";
+import BrandDashboard from "@/components/BrandDashboard.vue";
 import Button from "@/components/Button.vue";
-import CategoryDashboardSection from "@/components/CategoryDashboardSection.vue";
+import CategoryDashboard from "@/components/CategoryDashboard.vue";
+import ProductListDashboard from "@/components/ProductListDashboard.vue";
 import { ref } from "vue";
 
 enum Tab {
@@ -12,8 +13,8 @@ enum Tab {
     Category,
 }
 
-const tab = ref<Tab>(Tab.Brand);
-const show = ref(false);
+const tab = ref<Tab>(Tab.List_Product);
+const show = ref(true);
 </script>
 
 <template>
@@ -63,9 +64,10 @@ const show = ref(false);
             </ul>
         </section>
         <section class="py-12 px-6 col-span-7">
-            <AddProductSection v-if="tab === Tab.Add_Product" />
-            <BrandDashboardSection v-if="tab === Tab.Brand" />
-            <CategoryDashboardSection v-if="tab === Tab.Category" />
+            <ProductListDashboard v-if="tab === Tab.List_Product" />
+            <AddProductDashboard v-if="tab === Tab.Add_Product" />
+            <BrandDashboard v-if="tab === Tab.Brand" />
+            <CategoryDashboard v-if="tab === Tab.Category" />
         </section>
     </main>
 </template>

@@ -2,12 +2,13 @@
 
 use App\Dto\AddBrandRequest;
 use App\Dto\AddCategoryRequest;
+use App\Dto\AddProductRequest;
 use App\Dto\LoginUserRequest;
 use App\Dto\RegisterUserRequest;
 use App\Services\BrandService;
 use App\Services\CategoryService;
+use App\Services\ProductService;
 use App\Services\UserService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -246,8 +247,17 @@ Route::get('/categories', function (CategoryService $categoryService) {
     return $categoryService->getCategories();
 });
 
+Route::get('/products', function (ProductService $productService) {
+    return $productService->getProducts();
+});
+
 
 Route::middleware(['auth', 'role:admin'])->post('/categories', function (AddCategoryRequest $data, CategoryService $categoryService) {
     $response = $categoryService->addCategory($data);
+    return Inertia::share('id', $response);
+});
+
+Route::middleware(['auth', 'role:admin'])->post('/products', function (AddProductRequest $data, ProductService $productService) {
+    $response = $productService->addProduct($data);
     return Inertia::share('id', $response);
 });

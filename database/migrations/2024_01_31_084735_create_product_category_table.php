@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('product_category', function (Blueprint $table) {
-            $table->uuid('id')->primary();
             $table->timestamps();
 
             $table->uuid('category_id')->nullable(false);

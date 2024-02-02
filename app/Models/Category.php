@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
-use Product;
+
 
 class Category extends Model
 {
@@ -16,6 +16,6 @@ class Category extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'product_category');
+        return $this->belongsToMany(Product::class, 'product_category', 'category_id', 'product_id');
     }
 }
