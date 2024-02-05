@@ -1,13 +1,12 @@
 <?php
 
-use App\Dto\AddBrandRequest;
-use App\Dto\AddCategoryRequest;
-use App\Dto\AddProductRequest;
 use App\Dto\LoginUserRequest;
 use App\Dto\RegisterUserRequest;
-use App\Services\BrandService;
-use App\Services\CategoryService;
-use App\Services\ProductService;
+use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductController;
 use App\Services\UserService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -26,60 +25,7 @@ use Inertia\Inertia;
 */
 
 
-Route::get('/', function () {
-    return Inertia::render('Home', [
-        'products' => [
-            [
-                'id' => '1',
-                'name' => 'Product 1',
-                'price' => 100,
-                'score' => 5,
-                'reviews' => 10,
-                'image' => '/img/keyboard.png'
-            ],
-            [
-                'id' => '2',
-                'name' => 'Product 2',
-                'price' => 200,
-                'score' => 4,
-                'reviews' => 5,
-                'image' => '/img/charger.png'
-            ],
-            [
-                'id' => '3',
-                'name' => 'Product 3',
-                'price' => 300,
-                'score' => 3,
-                'reviews' => 3,
-                'image' => '/img/mouse.webp'
-            ],
-            [
-                'id' => '4',
-                'name' => 'Product 4',
-                'price' => 400,
-                'score' => 2,
-                'reviews' => 2,
-                'image' => '/img/stand.png'
-            ],
-            [
-                'id' => '5',
-                'name' => 'Product 5',
-                'price' => 500,
-                'score' => 1,
-                'reviews' => 1,
-                'image' => '/img/drive.webp'
-            ],
-            [
-                'id' => '6',
-                'name' => 'Product 6',
-                'price' => 600,
-                'score' => 0,
-                'reviews' => 0,
-                'image' => '/img/adapter.png'
-            ]
-        ]
-    ]);
-});
+Route::get('/', [HomeController::class, 'show']);
 
 Route::get('/cart', function () {
     return Inertia::render('Cart', [
@@ -125,71 +71,7 @@ Route::get('/cart', function () {
     ]);
 });
 
-Route::get('/products/{id}', function () {
-    return Inertia::render('ProductDetail', [
-        'product' =>   [
-            'id' => '1',
-            'name' => 'Product 1',
-            'price' => 100,
-            'score' => 5,
-            'reviews' => 10,
-            'image' => '/img/keyboard.png',
-            'stock' => 10,
-        ],
-
-        'products' => [
-            [
-                'id' => '1',
-                'name' => 'Product 1',
-                'price' => 100,
-                'score' => 5,
-                'reviews' => 10,
-                'image' => '/img/keyboard.png'
-            ],
-            [
-                'id' => '2',
-                'name' => 'Product 2',
-                'price' => 200,
-                'score' => 4,
-                'reviews' => 5,
-                'image' => '/img/charger.png'
-            ],
-            [
-                'id' => '3',
-                'name' => 'Product 3',
-                'price' => 300,
-                'score' => 3,
-                'reviews' => 3,
-                'image' => '/img/mouse.webp'
-            ],
-            [
-                'id' => '4',
-                'name' => 'Product 4',
-                'price' => 400,
-                'score' => 2,
-                'reviews' => 2,
-                'image' => '/img/stand.png'
-            ],
-            [
-                'id' => '5',
-                'name' => 'Product 5',
-                'price' => 500,
-                'score' => 1,
-                'reviews' => 1,
-                'image' => '/img/drive.webp'
-            ],
-            [
-                'id' => '6',
-                'name' => 'Product 6',
-                'price' => 600,
-                'score' => 0,
-                'reviews' => 0,
-                'image' => '/img/adapter.png'
-            ]
-        ]
-    ]);
-});
-
+Route::get('/products/{id}', [ProductController::class, 'showProductDetail']);
 
 Route::get('/register', function () {
     return Inertia::render('Register');
@@ -226,38 +108,18 @@ Route::post('/login', function (LoginUserRequest $data) {
         ]);
     }
 
-    return redirect('/');
-});
-
-Route::middleware(['auth', 'role:admin'])->get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    return back();
 });
 
 
-Route::get('/brands', function (BrandService $brandService) {
-    return $brandService->getBrands();
-});
 
-Route::middleware(['auth', 'role:admin'])->post('/brands', function (AddBrandRequest $data, BrandService $brandService) {
-    $response = $brandService->addBrand($data);
-    return Inertia::share('id', $response);
-});
+Route::get('/brands', [BrandController::class, 'getBrands']);
+Route::get('/categories', [BrandController::class, 'getCategories']);
+Route::get('/products', [ProductController::class, 'getProducts']);
 
-Route::get('/categories', function (CategoryService $categoryService) {
-    return $categoryService->getCategories();
-});
-
-Route::get('/products', function (ProductService $productService) {
-    return $productService->getProducts();
-});
-
-
-Route::middleware(['auth', 'role:admin'])->post('/categories', function (AddCategoryRequest $data, CategoryService $categoryService) {
-    $response = $categoryService->addCategory($data);
-    return Inertia::share('id', $response);
-});
-
-Route::middleware(['auth', 'role:admin'])->post('/products', function (AddProductRequest $data, ProductService $productService) {
-    $response = $productService->addProduct($data);
-    return Inertia::share('id', $response);
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'show']);
+    Route::post('/brands', [BrandController::class, 'addBrand']);
+    Route::post('/categories', [CategoryController::class, 'addCategory']);
+    Route::post('/products', [ProductController::class, 'addProduct']);
 });

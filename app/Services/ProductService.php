@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Dto\AddProductRequest;
+use App\Dto\ProductDetailDto;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\DataCollection;
 
@@ -13,4 +14,6 @@ interface ProductService
      * @return DataCollection<ProductDto>
      */
     function getProducts(): DataCollection;
+
+    function getProductDetail(string $id): ProductDetailDto;
 }

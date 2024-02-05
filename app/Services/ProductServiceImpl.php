@@ -3,11 +3,13 @@
 namespace App\Services;
 
 use App\Dto\AddProductRequest;
+use App\Dto\ProductDetailDto;
 use App\Dto\ProductDto;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Exception;
 use Illuminate\Validation\ValidationException;
 use Spatie\LaravelData\DataCollection;
 
@@ -49,5 +51,14 @@ class ProductServiceImpl implements ProductService
     public function getProducts(): DataCollection
     {
         return ProductDto::collection(Product::all());
+    }
+
+    public function getProductDetail(string $id): ProductDetailDto
+    {
+        $product = Product::where('id', $id)->first();
+        if ($product == null) {
+            throw new Exception();
+        }
+        return ProductDetailDto::from($product->all());
     }
 }

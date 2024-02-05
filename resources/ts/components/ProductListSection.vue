@@ -52,11 +52,16 @@ const [emblaNode] = emblaCarouselVue();
                 <ul
                     class="embla__container flex gap-x-6 gap-y-12 px-6 md:flex-wrap md:justify-around"
                 >
-                    <ProductCard
-                        class="embla__slide w-full min-w-[240px] md:max-w-[240px]"
+                    <a
+                        class="embla__slide"
+                        :href="`/products/${product.id}`"
                         v-for="product in props.products"
-                        :product="product"
-                    />
+                    >
+                        <ProductCard
+                            class="w-full min-w-[240px] md:max-w-[240px]"
+                            :product="product"
+                        />
+                    </a>
                 </ul>
             </div>
         </section>
