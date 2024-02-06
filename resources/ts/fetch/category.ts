@@ -15,3 +15,16 @@ export async function getCategories(): Promise<Category[]> {
             return [];
     }
 }
+
+export async function deleteCategory(id: string) {
+    const response = await fetch(`/categories/${id}`, {
+        method: "DELETE",
+    });
+    switch (response.status) {
+        case 200:
+            return await response.json();
+        default:
+            console.log({ response });
+            return [];
+    }
+}

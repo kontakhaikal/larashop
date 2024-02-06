@@ -114,12 +114,19 @@ Route::post('/login', function (LoginUserRequest $data) {
 
 
 Route::get('/brands', [BrandController::class, 'getBrands']);
-Route::get('/categories', [BrandController::class, 'getCategories']);
+Route::get('/categories', [CategoryController::class, 'getCategories']);
 Route::get('/products', [ProductController::class, 'getProducts']);
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'show']);
+
     Route::post('/brands', [BrandController::class, 'addBrand']);
+    Route::put('/brands/{id}', [BrandController::class, 'updateBrand']);
+    Route::delete('/brands/{id}', [BrandController::class, 'deleteBrand']);
+
     Route::post('/categories', [CategoryController::class, 'addCategory']);
+    Route::put('/categories/{id}', [CategoryController::class, 'updateCategory']);
+    Route::delete('/categories/{id}', [CategoryController::class, 'deleteCategory']);
+
     Route::post('/products', [ProductController::class, 'addProduct']);
 });

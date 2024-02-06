@@ -2,6 +2,7 @@
 import { getBrands } from "@/fetch/brand";
 import { useForm } from "@inertiajs/vue3";
 import { useQuery } from "@tanstack/vue-query";
+import BrandCard from "./BrandCard.vue";
 import Button from "./Button.vue";
 import Input from "./Input.vue";
 
@@ -14,10 +15,10 @@ const {
     queryFn: getBrands,
 });
 
-const form = useForm({ name: "" });
+const addBrandForm = useForm({ name: "" });
 
-const submit = () => {
-    form.post("/brands", {
+const adBrand = () => {
+    addBrandForm.post("/brands", {
         onSuccess() {
             refetch();
         },
@@ -27,30 +28,31 @@ const submit = () => {
 
 <template>
     <h1 class="font-semibold text-2xl whitespace-nowrap">Brand</h1>
-    <div class="mt-6 grid grid-cols-3 pr-24">
-        <ul class="col-span-2 flex gap-4">
+    <div class="mt-6 flex gap-x-4">
+        <ul class="flex flex-wrap gap-2 h-fit">
             <li
-                class="border py-2 px-4 rounded-md h-fit w-fit"
+                class="border p-4 rounded-md h-fit w-fit flex-[1_1_auto]"
                 v-if="isSuccess"
                 v-for="brand in brands"
             >
-                {{ brand.name }}
+                <BrandCard :brand="brand" :on-delete="refetch" />
             </li>
         </ul>
-        <div class="border py-6 px-8 rounded-md">
+        <div class="border py-6 px-8 rounded-md min-w-[32rem]">
             <h2 class="font-semibold text-xl whitespace-nowrap">Add Brand</h2>
-            <form class="mt-8" @submit.prevent="submit">
+            <form class="mt-8" @submit.prevent="adBrand">
                 <Input
                     id="brand-name"
                     label="Name"
-                    v-model="form.name"
+                    v-model="addBrandForm.name"
                     active
                 />
                 <Button
+                    type="submit"
                     class="w-full mt-6"
                     @click=""
                     variant="primary"
-                    :loading="form.processing"
+                    :loading="addBrandForm.processing"
                     >Add</Button
                 >
             </form>

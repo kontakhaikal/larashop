@@ -3,17 +3,13 @@ import { Ref, ref } from "vue";
 import EmailSection from "../components/EmailSection.vue";
 import Footer from "../components/Footer.vue";
 import Header from "../components/Header.vue";
+import OrganizeOrderCard from "../components/OrganizeOrderCard.vue";
 import RecomendationSection from "../components/RecomendationSection.vue";
 import type { Product } from "./Home.vue";
-import OrganizeOrderCard from "../components/OrganizeOrderCard.vue";
 
 const props = defineProps<{ products: Product[]; product: Product }>();
 
 const product: Ref<Product> = ref(props.product);
-
-const activeImage = ref(product.value.image);
-
-const images = ref(Array(4).fill(product.value.image));
 </script>
 
 <template>
@@ -22,23 +18,15 @@ const images = ref(Array(4).fill(product.value.image));
         <section
             class="container flex flex-col lg:flex-row gap-x-6 gap-y-6 px-6 lg:px-0"
         >
-            <div class="flex flex-col lg:max-w-[30rem]">
+            <div class="lg:max-w-[30rem] w-full">
                 <div
                     class="w-full h-full rounded-lg bg-slate-200 grid place-items-center"
                 >
-                    <img :src="activeImage" alt="" />
-                </div>
-                <div class="flex gap-x-2 mt-2">
-                    <div
-                        v-for="image in images"
-                        class="rounded-md border bg-slate-200 p-1"
-                    >
-                        <img
-                            class="w-full h-full object-contain"
-                            :src="image"
-                            alt=""
-                        />
-                    </div>
+                    <img
+                        class="object-cover"
+                        :src="product.image"
+                        :alt="product.name"
+                    />
                 </div>
             </div>
             <div class="">

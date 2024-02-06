@@ -7,9 +7,9 @@ use Spatie\LaravelData\Data;
 class ProductDto extends Data
 {
     public function __construct(
-        public string $id,
-        public string $name,
-        public int $price,
+        public readonly string $id,
+        public readonly string $name,
+        public readonly int $price,
         public readonly string $image
     ) {
     }

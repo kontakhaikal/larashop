@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Dto\AddProductRequest;
+use App\Dto\BrandDto;
+use App\Dto\CategoryDto;
 use App\Dto\ProductDetailDto;
 use App\Dto\ProductDto;
 use App\Models\Brand;
@@ -55,10 +57,24 @@ class ProductServiceImpl implements ProductService
 
     public function getProductDetail(string $id): ProductDetailDto
     {
-        $product = Product::where('id', $id)->first();
+        $product = Product::with(['categories', 'brand'])->where('id', $id)->first();
+
         if ($product == null) {
             throw new Exception();
         }
-        return ProductDetailDto::from($product->all());
+
+        return new ProductDetailDto(
+            $product->id,
+            $product->name,
+            $product->description,
+            $product->image,
+            $product->price,
+            $product->stock,
+            new BrandDto(
+                $product->brand->id,
+                $product->brand->name,
+            ),
+            CategoryDto::collection($product->categories)
+        );
     }
 }

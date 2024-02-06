@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import Header from "../components/Header.vue";
-import Footer from "../components/Footer.vue";
-import ProductListSection from "../components/ProductListSection.vue";
-import EmailSection from "../components/EmailSection.vue";
 import BannerSection from "../components/BannerSection.vue";
+import EmailSection from "../components/EmailSection.vue";
+import Footer from "../components/Footer.vue";
+import Header from "../components/Header.vue";
+import ProductListSection from "../components/ProductListSection.vue";
 import RecomendationSection from "../components/RecomendationSection.vue";
 
 export type Product = {
@@ -11,6 +11,7 @@ export type Product = {
     name: string;
     price: number;
     image: string;
+    description: string;
     score: number;
     reviews: number;
     stock: number;
