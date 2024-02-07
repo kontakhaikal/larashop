@@ -108,7 +108,7 @@ Route::post('/login', function (LoginUserRequest $data) {
         ]);
     }
 
-    return back();
+    return redirect('/');
 });
 
 
@@ -116,6 +116,8 @@ Route::post('/login', function (LoginUserRequest $data) {
 Route::get('/brands', [BrandController::class, 'getBrands']);
 Route::get('/categories', [CategoryController::class, 'getCategories']);
 Route::get('/products', [ProductController::class, 'getProducts']);
+
+Route::get('/carts', [CartController::class, 'show']);
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'show']);

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Dto\RegisterUserRequest;
+use App\Events\CustomerRegistered;
 use App\Exceptions\RegisterAdminException;
 use App\Models\Admin;
 use App\Models\Customer;
@@ -25,6 +26,7 @@ class UserServiceImpl implements UserService
     {
         $customer = Customer::create($request->all());
         $customer->save();
+        CustomerRegistered::dispatch($customer);
         return $customer->id;
     }
 }

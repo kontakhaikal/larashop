@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Services\BrandService;
 use App\Services\BrandServiceImpl;
+use App\Services\CartService;
+use App\Services\CartServiceImpl;
 use App\Services\CategoryService;
 use App\Services\CategoryServiceImpl;
 use App\Services\ProductService;
@@ -23,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(BrandService::class, BrandServiceImpl::class);
         $this->app->bind(CategoryService::class, CategoryServiceImpl::class);
         $this->app->bind(ProductService::class, ProductServiceImpl::class);
+        $this->app->bind(CartService::class, CartServiceImpl::class);
     }
 
     /**
